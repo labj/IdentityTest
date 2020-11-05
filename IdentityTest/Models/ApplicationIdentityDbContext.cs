@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace IdentityTest.Models
 {
-    public class ApplicationIdentityDbContext : Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityDbContext<ApplicationUser>
+    public class ApplicationIdentityDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationIdentityDbContext(DbContextOptions<ApplicationIdentityDbContext> options) 
             : base(options) 
