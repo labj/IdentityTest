@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace IdentityTest
 {
@@ -32,6 +33,13 @@ namespace IdentityTest
                 opts.Password.RequireLowercase = false;
                 opts.Password.RequireUppercase = true;
                 opts.Password.RequireDigit = true;
+            });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.Name = ".AspNetCore.Identity.Application";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+                options.SlidingExpiration = true;
             });
 
             services.AddControllersWithViews();
