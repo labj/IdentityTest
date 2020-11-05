@@ -17,7 +17,7 @@ namespace IdentityTest.Controllers
             userManager = userMgr;
         }
 
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Index()
         {
             ApplicationUser user = await userManager.GetUserAsync(HttpContext.User);
