@@ -1,3 +1,4 @@
+using IdentityTest.IdentityPolicy;
 using IdentityTest.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -18,8 +19,21 @@ namespace IdentityTest
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IPasswordValidator<ApplicationUser>, CustomPasswordPolicy>();
+            services.AddTransient<IUserValidator<ApplicationUser>, CustomUsernameEmailPolicy>();
             services.AddDbContext<ApplicationIdentityDbContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationIdentityDbContext>().AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(opts => {
+                opts.User.RequireUniqueEmail = true;
+                opts.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
+                opts.Password.RequiredLength = 8;
+                opts.Password.RequireNonAlphanumeric = true;
+                opts.Password.RequireLowercase = false;
+                opts.Password.RequireUppercase = true;
+                opts.Password.RequireDigit = true;
+            });
+
             services.AddControllersWithViews();
         }
 
