@@ -38,7 +38,12 @@ namespace IdentityTest.Controllers
                 ApplicationUser applicationUser = new ApplicationUser
                 {
                     UserName = user.Name,
-                    Email = user.Email
+                    Email = user.Email,
+                    Age = user.Age,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    City = user.City,
+                    Discriminator = user.Discriminator
                 };
 
                 IdentityResult result = await userManager.CreateAsync(applicationUser, user.Password);
@@ -63,7 +68,7 @@ namespace IdentityTest.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(string id, string email, string password)
+        public async Task<IActionResult> Update(string id, string email, string password, int age, string firstName, string lastName, string discriminator, string city)
         {
             ApplicationUser user = await userManager.FindByIdAsync(id);
             if (user != null)
@@ -94,6 +99,15 @@ namespace IdentityTest.Controllers
                 }
                 else
                     ModelState.AddModelError("", "Password cannot be empty");
+            
+                user.Age = age;
+
+                City myCity;
+                Enum.TryParse(city, out myCity);
+                user.City = myCity;
+                user.FirstName = firstName;
+                user.LastName = lastName;
+                user.Discriminator = discriminator;
 
                 if (validEmail != null && validPass != null && validEmail.Succeeded && validPass.Succeeded)
                 {
